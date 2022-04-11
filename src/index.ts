@@ -64,9 +64,7 @@ const showIndexAndPrice = async (data) => {
 };
 
 client.once("ready", async () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-
-  const bbi = {
+  const bitcoinConfidence = {
     data: {},
     set setIndexAndPriceData(data) {
       this.data = data;
@@ -74,17 +72,19 @@ client.once("ready", async () => {
     },
   };
 
-  bbi.setIndexAndPriceData = await fetchBitcoinConfidence();
+  bitcoinConfidence.setIndexAndPriceData = await fetchBitcoinConfidence();
 
   // Set a cron job to fetch new data at a certain time on UTC
   cron.schedule(
     "0 8 * * *",
     async () => {
       console.info(`Time now: ${Date.now()}`);
-      bbi.setIndexAndPriceData = await fetchBitcoinConfidence();
+      bitcoinConfidence.setIndexAndPriceData = await fetchBitcoinConfidence();
     },
     { timezone: "UTC" }
   );
 });
 
-client.login(process.env.DISCORD_BOT_API_TOKEN);
+client
+  .login(process.env.DISCORD_BOT_API_TOKEN)
+  .then(() => console.log("Bot has successfully logged in!"));
