@@ -49,7 +49,7 @@ const showIndexAndPrice = async (data) => {
 
   const guilds = await client.guilds.cache;
   guilds.forEach((guild) => {
-    guild.me.setNickname(`BBI: ${formattedBitcoinBullIndex}`);
+    guild.me.setNickname(`Bitcoin CI: ${formattedBitcoinBullIndex}`);
   });
 
   client.user.setPresence({
