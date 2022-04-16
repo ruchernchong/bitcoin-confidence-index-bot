@@ -44,7 +44,7 @@ const showIndexAndPrice = async (data) => {
   const latestConfidenceData = getLatestData(Confidence);
   const latestPriceData = getLatestData(Price);
 
-  const formattedBitcoinBullIndex = (latestConfidenceData * 100).toFixed(0);
+  const formattedBitcoinBullIndex = (latestConfidenceData * 100).toFixed();
   const formattedBitcoinPrice = latestPriceData.toFixed(2);
 
   const guilds = await client.guilds.cache;
