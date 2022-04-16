@@ -5,14 +5,20 @@ import "dotenv/config";
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
+export interface BitcoinData {
+  [key: string]: any;
+  Confidence: object;
+  Price: object;
+}
+
 /**
  * Fetch the Bitcoin confidence data from https://cbbi.info
  */
-const fetchBitcoinConfidence = async () => {
+const fetchBitcoinConfidence = async (): Promise<BitcoinData> => {
   try {
     const { data } = await axios.get(process.env.API_URL);
     console.info(`Data fetched for Bitcoin confidence!`);
-    const { Confidence, Price } = data;
+    const { Confidence, Price }: BitcoinData = data;
 
     if (data) {
       // We only want the data for Confidence and Price
@@ -28,7 +34,7 @@ const fetchBitcoinConfidence = async () => {
  *
  * @param data
  */
-const getLatestData = (data) => {
+const getLatestData = (data: object): number => {
   const keys = Object.keys(data);
   return data[keys[keys.length - 1]];
 };
@@ -38,7 +44,7 @@ const getLatestData = (data) => {
  *
  * @param data
  */
-const showIndexAndPrice = async (data) => {
+const showIndexAndPrice = async (data: BitcoinData) => {
   const { Confidence, Price } = data;
 
   const latestConfidenceData = getLatestData(Confidence);
@@ -48,9 +54,9 @@ const showIndexAndPrice = async (data) => {
   const formattedBitcoinPrice = latestPriceData.toFixed(2);
 
   const guilds = await client.guilds.cache;
-  guilds.forEach((guild) => {
-    guild.me.setNickname(`Bitcoin CI: ${formattedBitcoinBullIndex}`);
-  });
+  guilds.forEach((guild) =>
+    guild.me.setNickname(`Bitcoin CI: ${formattedBitcoinBullIndex}`)
+  );
 
   client.user.setPresence({
     status: "online",
@@ -66,7 +72,7 @@ const showIndexAndPrice = async (data) => {
 client.once("ready", async () => {
   const bitcoinConfidence = {
     data: {},
-    set setIndexAndPriceData(data) {
+    set setIndexAndPriceData(data: BitcoinData) {
       this.data = data;
       showIndexAndPrice(data);
     },
