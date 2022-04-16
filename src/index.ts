@@ -74,15 +74,12 @@ client.once("ready", async () => {
 
   bitcoinConfidence.setIndexAndPriceData = await fetchBitcoinConfidence();
 
-  // Set a cron job to fetch new data at a certain time on UTC
-  cron.schedule(
-    "0 8 * * *",
-    async () => {
-      console.info(`Time now: ${Date.now()}`);
-      bitcoinConfidence.setIndexAndPriceData = await fetchBitcoinConfidence();
-    },
-    { timezone: "UTC" }
-  );
+  // Set a cron job to fetch new data at every 4 hours
+  cron.schedule("* * */4 * * *", async () => {
+    console.info(`Time now: ${Date.now()}`);
+
+    bitcoinConfidence.setIndexAndPriceData = await fetchBitcoinConfidence();
+  });
 });
 
 client
